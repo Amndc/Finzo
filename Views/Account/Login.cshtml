@@ -1,0 +1,62 @@
+﻿ @model Finzo.Models.Users
+
+<div class="text-center">
+    <h1 class="display-4">Login</h1>
+    <section id="id">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-md-4 offset-md-4">
+                    <form asp-controller="Account" asp-action="Login" method="post">
+
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" asp-for="Username" class="form-control" id="username" placeholder="Enter username">
+
+
+                            <label for="password">Password</label>
+                            <input type="password" asp-for="Password" class="form-control" id="password" placeholder="Enter password">
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-2">Login</button>
+
+                    </form>
+                     <div id="mensagemErro" class="alert alert-danger mt-3" style="display: none;"></div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+   
+</div>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.querySelector("#formLogin");
+
+        form.addEventListener("submit", function (event) {
+            event.preventDefault(); // Impede o reload da página
+
+            const formData = new FormData(form);
+
+            fetch(form.action, {
+                method: "POST",
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    const mensagemErro = document.getElementById("mensagemErro");
+
+                    if (!data.sucesso) {
+                        mensagemErro.textContent = data.mensagem;
+                        mensagemErro.style.display = "block"; // Exibe a mensagem de erro
+                    } else {
+                        window.location.href = data.redirecionarPara; // Redireciona para Home
+                    }
+                })
+                .catch(error => console.error("Erro na requisição:", error));
+        });
+    });
+</script>
+
